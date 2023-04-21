@@ -26,7 +26,7 @@ def check_spoofed_packet(packet):
     
     #print "src: " + src_first + " dst: " + dst_first
     if src_first != "10" and dst_first != "10":
-        print "[Spoofed IP address]: " + "src:" + src + ", dst:" + dst
+        print("[Spoofed IP address]: " + "src:" + src + ", dst:" + dst)
  
     
 def check_unauthorized_servers(packet):
@@ -40,10 +40,10 @@ def check_unauthorized_servers(packet):
     dst_first = dst.split(".", 1)[0]    
 
     if src_first != "10" and dst_first == "10" and flag == "2":
-        print "[Attempted server connection]: " + "rem:" + src + ", srv:" + dst + ", port:" + str(packet.dport)
+        print("[Attempted server connection]: " + "rem:" + src + ", srv:" + dst + ", port:" + str(packet.dport))
     
     if src_first == "10" and dst_first != "10" and flag == "18":
-        print "[Accepted server connection]: " + "rem:" + dst + ", srv:" + src + ", port:" + str(packet.sport)
+        print("[Accepted server connection]: " + "rem:" + dst + ", srv:" + src + ", port:" + str(packet.sport))
    
 
 def check_sinkholes(packet):
@@ -51,7 +51,7 @@ def check_sinkholes(packet):
     
     if ancount == 1 and packet[DNS].an.rdata in sinkhole_list:
         #print packet[IP].src + " " + packet[IP].dst
-        print "[Sinkhole lookup]: " + "src:" + packet[IP].dst + ", host:" + packet[DNS].an.rrname[:-1] + ", ip:" + packet[DNS].an.rdata
+        print("[Sinkhole lookup]: " + "src:" + packet[IP].dst + ", host:" + packet[DNS].an.rrname[:-1] + ", ip:" + packet[DNS].an.rdata)
         
 
 def check_ARP_spoof(packet):
@@ -65,7 +65,7 @@ def check_ARP_spoof(packet):
             if arp_dict[ip] != mac:
                 output = "[Potential ARP spoofing]: " + "ip:" + ip + ", old:" + arp_dict[ip].upper() + ", new:" + mac.upper()
                 if output not in arp_spoof_list:
-                    print output
+                    print (output)
                     arp_spoof_list.append(output)
         else:
             arp_dict[ip] = mac
@@ -75,7 +75,7 @@ def check_IIS_worm(packet):
     get_info = packet[Raw].load
     for pattern in worm_pattern:
         if pattern in get_info:
-            print "[Unicode IIS exploit]: " + "src:" + packet[IP].src + ", dst:" + packet[IP].dst
+            print ("[Unicode IIS exploit]: " + "src:" + packet[IP].src + ", dst:" + packet[IP].dst)
             break    
     
     
@@ -83,7 +83,7 @@ def check_NTP_DDOS(packet):
     if len(packet[Raw].load) >= 4:
         symbol = packet[Raw].load[3]
         if symbol == "*":
-            print "[NTP DDoS]: " + "vic:" + packet[IP].src + ", srv:" + packet[IP].dst    
+            print ("[NTP DDoS]: " + "vic:" + packet[IP].src + ", srv:" + packet[IP].dst)    
     
     
         
@@ -149,7 +149,7 @@ def main():
             check_NTP_DDOS(packet)
                         
     # overall summary about packets    
-    print "Analyzed " + str(packet_count) + " packets, " + str(total_size) + " bytes"
+    print ("Analyzed " + str(packet_count) + " packets, " + str(total_size) + " bytes")
         
         
         
